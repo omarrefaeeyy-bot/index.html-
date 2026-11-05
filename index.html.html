@@ -1,0 +1,1630 @@
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="3R Learning - جميع موادك الدراسية في مكان واحد" />
+  <title>3R Learning</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --bg: #10191d;
+      --surface: #172428;
+      --text: #eef3f2;
+      --muted: #94a5a6;
+      --accent: #8eb4af;
+      --line: rgba(190, 216, 213, 0.11);
+      --px: 50vw;
+      --py: 30vh;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: "Noto Sans Arabic", sans-serif;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    svg {
+      display: block;
+    }
+
+    .site {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(
+          circle at 84% 10%,
+          rgba(96, 137, 133, 0.14),
+          transparent 24rem
+        ),
+        var(--bg);
+    }
+
+    .progress {
+      position: fixed;
+      z-index: 100;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #9bc0bb, #929fba);
+      box-shadow: 0 0 16px rgba(151, 190, 185, 0.55);
+      transform: scaleX(0);
+      transform-origin: right;
+    }
+
+    .cursor-glow {
+      position: fixed;
+      z-index: 0;
+      top: 0;
+      left: 0;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      opacity: 0.16;
+      background: radial-gradient(
+        circle,
+        rgba(130, 174, 168, 0.25),
+        transparent 68%
+      );
+      transform: translate(calc(var(--px) - 50%), calc(var(--py) - 50%));
+      transition: transform 100ms ease-out;
+      pointer-events: none;
+    }
+
+    .rain {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .rain i {
+      position: absolute;
+      top: -80px;
+      left: var(--x);
+      width: 1px;
+      height: 48px;
+      opacity: 0.11;
+      background: linear-gradient(transparent, #b8d1d3);
+      animation: rainfall var(--duration) linear var(--delay) infinite;
+    }
+
+    .nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      height: 88px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 6vw, 110px);
+      border-bottom: 1px solid var(--line);
+      direction: ltr;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
+      text-decoration: none;
+      direction: ltr;
+    }
+
+    .brand-logo {
+      display: grid;
+      width: 50px;
+      height: 50px;
+      place-items: center;
+      border: 1px solid rgba(193, 222, 218, 0.2);
+      border-radius: 16px;
+      background: linear-gradient(145deg, #668f8c, #82a6a2);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.18);
+      font-family: "Noto Kufi Arabic", sans-serif;
+      font-weight: 800;
+    }
+
+    .brand-name {
+      font-family: "Noto Kufi Arabic", sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      direction: ltr;
+    }
+
+    .icon-button,
+    .nav-button,
+    .primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(183, 215, 211, 0.15);
+      color: #e2ebe9;
+      background: rgba(20, 35, 38, 0.72);
+      transition: 180ms ease;
+    }
+
+    .icon-button {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+    }
+
+    .icon-button.active {
+      border-color: rgba(143, 187, 181, 0.5);
+      color: #b8d4cf;
+      background: rgba(90, 128, 124, 0.22);
+    }
+
+    .nav-button {
+      height: 50px;
+      gap: 9px;
+      padding: 0 18px;
+      border-radius: 15px;
+      direction: rtl;
+    }
+
+    .icon-button:hover,
+    .nav-button:hover {
+      border-color: rgba(151, 192, 187, 0.46);
+      transform: translateY(-2px);
+    }
+
+    .icon {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 830px;
+      border-bottom: 1px solid var(--line);
+      background-image:
+        linear-gradient(rgba(138, 172, 168, 0.038) 1px, transparent 1px),
+        linear-gradient(
+          90deg,
+          rgba(138, 172, 168, 0.038) 1px,
+          transparent 1px
+        );
+      background-size: 66px 66px;
+    }
+
+    .hero::after {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at 50% 40%,
+        transparent 16%,
+        var(--bg) 73%
+      );
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      width: min(1010px, calc(100% - 40px));
+      margin: auto;
+      align-items: center;
+      flex-direction: column;
+      padding: 82px 0 95px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 15px;
+      border: 1px solid rgba(135, 183, 177, 0.22);
+      border-radius: 999px;
+      color: #b8cac7;
+      background: rgba(28, 48, 50, 0.72);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #91bdb7;
+      box-shadow: 0 0 12px #91bdb7;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 900px;
+      margin: 34px 0 14px;
+      font-family: "Noto Kufi Arabic", sans-serif;
+      font-size: clamp(43px, 6vw, 72px);
+      font-weight: 800;
+      line-height: 1.42;
+      letter-spacing: -3px;
+    }
+
+    h1 span {
+      display: block;
+      background: linear-gradient(90deg, #aab1c4, #8eb8b2, #9fb5b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy {
+      max-width: 740px;
+      margin-bottom: 0;
+      color: #99a8a9;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      margin-top: 30px;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .primary {
+      height: 57px;
+      gap: 15px;
+      padding: 0 25px;
+      border-color: rgba(188, 219, 215, 0.27);
+      border-radius: 15px;
+      background: linear-gradient(135deg, #688f8c, #7da29e);
+      box-shadow: 0 17px 38px rgba(83, 128, 124, 0.22);
+      font-weight: 700;
+    }
+
+    .primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 22px 44px rgba(83, 128, 124, 0.33);
+    }
+
+    .hero-count {
+      color: #91a1a1;
+      font-size: 13px;
+    }
+
+    .hero-count strong {
+      margin-left: 6px;
+      color: #e2eae8;
+      font-size: 17px;
+    }
+
+    .chips {
+      display: flex;
+      margin-top: 27px;
+      gap: 9px;
+    }
+
+    .chips span {
+      padding: 7px 12px;
+      border: 1px solid rgba(170, 204, 200, 0.1);
+      border-radius: 999px;
+      color: #839795;
+      background: rgba(23, 39, 42, 0.55);
+      font-size: 11px;
+    }
+
+    .prayer {
+      display: flex;
+      width: 100%;
+      min-height: 215px;
+      margin-top: 52px;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 70px;
+      border: 1px solid rgba(178, 202, 196, 0.22);
+      border-radius: 24px;
+      background:
+        radial-gradient(
+          circle at 20% 8%,
+          rgba(255, 255, 255, 0.05),
+          transparent 38%
+        ),
+        linear-gradient(
+          120deg,
+          rgba(39, 58, 61, 0.95),
+          rgba(29, 44, 48, 0.95)
+        );
+      box-shadow: 0 24px 55px rgba(1, 8, 10, 0.24);
+      flex-direction: column;
+    }
+
+    .prayer-mark {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      margin-bottom: 9px;
+      place-items: center;
+      border: 1px solid rgba(160, 199, 193, 0.23);
+      border-radius: 50%;
+      color: #a9c6c1;
+      font-size: 21px;
+    }
+
+    .prayer-main {
+      margin-bottom: 0;
+      font-size: clamp(17px, 2vw, 25px);
+      font-weight: 700;
+      line-height: 1.8;
+    }
+
+    .prayer hr {
+      width: 44px;
+      height: 1px;
+      margin: 10px 0;
+      border: 0;
+      background: rgba(164, 197, 192, 0.24);
+    }
+
+    .prayer small {
+      color: #9eafad;
+    }
+
+    .prayer strong {
+      color: #dce8e5;
+    }
+
+    .library {
+      position: relative;
+      z-index: 2;
+      padding: 95px clamp(20px, 6vw, 110px) 110px;
+      background:
+        radial-gradient(
+          circle at 8% 25%,
+          rgba(95, 130, 130, 0.12),
+          transparent 26rem
+        ),
+        var(--bg);
+    }
+
+    .library-head {
+      display: flex;
+      max-width: 1320px;
+      margin: 0 auto 42px;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .section-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .library h2 {
+      margin-bottom: 0;
+      font-family: "Noto Kufi Arabic", sans-serif;
+      font-size: clamp(29px, 4vw, 44px);
+      line-height: 1.45;
+    }
+
+    .search {
+      display: flex;
+      width: min(100%, 390px);
+      height: 57px;
+      align-items: center;
+      gap: 12px;
+      padding: 0 17px;
+      border: 1px solid rgba(174, 211, 207, 0.15);
+      border-radius: 15px;
+      color: #728684;
+      background: rgba(20, 35, 38, 0.82);
+    }
+
+    .search:focus-within {
+      border-color: rgba(139, 185, 179, 0.58);
+    }
+
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: #dce6e4;
+      background: transparent;
+    }
+
+    .filters {
+      display: flex;
+      max-width: 1320px;
+      margin: -18px auto 28px;
+      gap: 8px;
+    }
+
+    .filters button {
+      display: inline-flex;
+      min-height: 41px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 15px;
+      border: 1px solid rgba(169, 205, 201, 0.12);
+      border-radius: 12px;
+      color: #8e9e9f;
+      background: rgba(18, 32, 35, 0.62);
+      transition: 180ms ease;
+    }
+
+    .filters button:hover,
+    .filters button.active {
+      border-color: rgba(149, 190, 185, 0.38);
+      color: #d7e4e1;
+      background: rgba(88, 127, 123, 0.18);
+      transform: translateY(-2px);
+    }
+
+    .filters b {
+      display: grid;
+      min-width: 22px;
+      height: 22px;
+      place-items: center;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.06);
+      font-size: 10px;
+    }
+
+    .grid {
+      display: grid;
+      max-width: 1320px;
+      margin: auto;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      min-height: 250px;
+      overflow: hidden;
+      border: 1px solid rgba(173, 210, 205, 0.12);
+      border-radius: 21px;
+      color: inherit;
+      background:
+        linear-gradient(
+          145deg,
+          color-mix(in srgb, var(--card) 9%, transparent),
+          transparent 46%
+        ),
+        rgba(17, 31, 34, 0.88);
+      text-decoration: none;
+      transition: 220ms ease;
+    }
+
+    .card:hover {
+      border-color: color-mix(in srgb, var(--card) 50%, transparent);
+      box-shadow: 0 24px 45px rgba(3, 11, 13, 0.23);
+      transform: translateY(-6px);
+    }
+
+    .card-icon {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      display: grid;
+      width: 58px;
+      height: 58px;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--card) 37%, transparent);
+      border-radius: 17px;
+      color: color-mix(in srgb, var(--card) 83%, white);
+      background: color-mix(in srgb, var(--card) 12%, transparent);
+      transition: 220ms ease;
+    }
+
+    .card:hover .card-icon {
+      transform: rotate(-5deg) scale(1.06);
+    }
+
+    .card-body {
+      display: flex;
+      width: 100%;
+      padding: 28px;
+      flex-direction: column;
+    }
+
+    .card-kicker {
+      color: color-mix(in srgb, var(--card) 82%, white);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .card h3 {
+      margin: 17px 0 3px;
+      font-family: "Noto Kufi Arabic", sans-serif;
+      font-size: 20px;
+    }
+
+    .card p {
+      margin-bottom: 0;
+      color: #758886;
+      font-size: 13px;
+      direction: ltr;
+      text-align: right;
+    }
+
+    .card-footer {
+      display: flex;
+      margin-top: auto;
+      align-items: center;
+      justify-content: space-between;
+      color: #849694;
+      font-size: 12px;
+    }
+
+    .arrow-box {
+      display: grid;
+      width: 39px;
+      height: 39px;
+      place-items: center;
+      border: 1px solid color-mix(in srgb, var(--card) 34%, transparent);
+      border-radius: 11px;
+      color: color-mix(in srgb, var(--card) 80%, white);
+    }
+
+    .empty {
+      display: none;
+      max-width: 1320px;
+      margin: auto;
+      padding: 60px 20px;
+      border: 1px dashed var(--line);
+      border-radius: 20px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .empty.visible {
+      display: block;
+    }
+
+    .sound-note {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      width: min(850px, calc(100% - 40px));
+      margin: 0 auto 90px;
+      align-items: center;
+      gap: 22px;
+      padding: 26px 30px;
+      border: 1px solid var(--line);
+      border-radius: 21px;
+      color: #96a7a7;
+      background: rgba(26, 42, 45, 0.66);
+    }
+
+    .sound-note-icon {
+      display: grid;
+      width: 57px;
+      height: 57px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 17px;
+      color: #aac7c2;
+      background: rgba(126, 165, 160, 0.12);
+    }
+
+    .sound-note h2 {
+      margin-bottom: 4px;
+      color: #dce6e5;
+      font-size: 18px;
+    }
+
+    .sound-note p {
+      margin-bottom: 0;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    footer {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      min-height: 110px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px clamp(20px, 6vw, 110px);
+      border-top: 1px solid var(--line);
+      color: #718380;
+      font-size: 12px;
+    }
+
+    footer strong {
+      color: #adbcba;
+    }
+
+    .top-button {
+      position: fixed;
+      z-index: 40;
+      right: 22px;
+      bottom: 22px;
+      display: grid;
+      width: 49px;
+      height: 49px;
+      place-items: center;
+      border: 1px solid rgba(157, 195, 190, 0.25);
+      border-radius: 15px;
+      opacity: 0;
+      color: #dce7e5;
+      background: rgba(31, 50, 53, 0.92);
+      transform: translateY(18px) rotate(90deg);
+      transition: 220ms ease;
+      pointer-events: none;
+    }
+
+    .top-button.visible {
+      opacity: 1;
+      transform: translateY(0) rotate(90deg);
+      pointer-events: auto;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 60;
+      bottom: 27px;
+      left: 50%;
+      display: flex;
+      min-width: 220px;
+      min-height: 49px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 9px 18px;
+      border: 1px solid rgba(163, 201, 196, 0.2);
+      border-radius: 14px;
+      opacity: 0;
+      color: #dce7e5;
+      background: rgba(27, 44, 47, 0.95);
+      box-shadow: 0 18px 45px rgba(2, 8, 10, 0.35);
+      font-size: 12px;
+      transform: translate(-50%, 20px);
+      transition: 220ms ease;
+      pointer-events: none;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .toast::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #92bdb6;
+      box-shadow: 0 0 10px #92bdb6;
+      content: "";
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(22px);
+      transition:
+        opacity 650ms ease,
+        transform 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    [data-reveal].visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    @keyframes rainfall {
+      to {
+        transform: translate3d(-70px, calc(100vh + 160px), 0);
+      }
+    }
+
+    @media (max-width: 950px) {
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav {
+        height: 76px;
+      }
+
+      .brand-name {
+        display: none;
+      }
+
+      .brand-logo,
+      .icon-button,
+      .nav-button {
+        height: 44px;
+      }
+
+      .brand-logo,
+      .icon-button {
+        width: 44px;
+      }
+
+      .nav-button {
+        padding: 0 13px;
+        font-size: 12px;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-inner {
+        padding: 56px 0 72px;
+      }
+
+      h1 {
+        font-size: clamp(38px, 12vw, 53px);
+        letter-spacing: -2px;
+      }
+
+      .hero-copy {
+        font-size: 15px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .chips {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .prayer {
+        min-height: 270px;
+        padding: 35px 29px;
+      }
+
+      .prayer-main {
+        font-size: 18px;
+      }
+
+      .library {
+        padding-top: 72px;
+        padding-bottom: 80px;
+      }
+
+      .library-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .search {
+        width: 100%;
+      }
+
+      .filters {
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+
+      .filters button {
+        flex: 0 0 auto;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sound-note {
+        align-items: flex-start;
+        padding: 22px;
+      }
+
+      footer {
+        gap: 17px;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .cursor-glow {
+        display: none;
+      }
+
+      .toast {
+        bottom: 74px;
+        max-width: calc(100% - 36px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <svg width="0" height="0" style="position: absolute">
+    <symbol id="book" viewBox="0 0 24 24">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+    </symbol>
+
+    <symbol id="volume" viewBox="0 0 24 24">
+      <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+      <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" />
+    </symbol>
+
+    <symbol id="mute" viewBox="0 0 24 24">
+      <path d="m2 2 20 20M11 5 7.7 7.7M6 9H2v6h4l5 4v-7" />
+      <path d="M16.5 9.5a5 5 0 0 1 .8 4.5M19 6a9 9 0 0 1 1.5 11" />
+    </symbol>
+
+    <symbol id="arrow" viewBox="0 0 24 24">
+      <path d="M19 12H5M12 19l-7-7 7-7" />
+    </symbol>
+
+    <symbol id="search" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-4-4" />
+    </symbol>
+
+    <symbol id="assignment" viewBox="0 0 24 24">
+      <rect x="5" y="4" width="14" height="17" rx="2" />
+      <path d="M9 4.5V3h6v1.5M9 10h6M9 14h6M9 18h3" />
+    </symbol>
+
+    <symbol id="exam" viewBox="0 0 24 24">
+      <path d="M6 3h12v18H6zM9 7h6M9 11h3m-2 5 1.5 1.5L15 14" />
+    </symbol>
+
+    <symbol id="board" viewBox="0 0 24 24">
+      <rect x="3" y="4" width="18" height="13" rx="2" />
+      <path d="M8 21h8M12 17v4M7 9h5M7 12h9" />
+    </symbol>
+
+    <symbol id="notes" viewBox="0 0 24 24">
+      <path d="M4 5h16v16H4zM8 3v4M16 3v4M8 11h8M8 15h6" />
+    </symbol>
+
+    <symbol id="calendar" viewBox="0 0 24 24">
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M16 3v4M8 3v4M3 10h18M8 14h2M14 14h2M8 18h2" />
+    </symbol>
+
+    <symbol id="rules" viewBox="0 0 24 24">
+      <path d="M6 3h9l3 3v15H6zM14 3v4h4M9 11h6M9 15h6M9 19h4" />
+    </symbol>
+  </svg>
+
+  <main class="site" id="top">
+    <div class="progress" id="progress"></div>
+    <div class="cursor-glow"></div>
+    <div class="rain" id="rain" aria-hidden="true"></div>
+
+    <header class="nav">
+      <a class="brand sound-link" href="#top">
+        <span class="brand-logo">3R</span>
+        <span class="brand-name">3R Learning</span>
+      </a>
+
+      <nav class="nav-actions" aria-label="التنقل الرئيسي">
+        <button class="icon-button" id="soundButton" aria-label="تشغيل الصوت">
+          <svg class="icon"><use href="#mute"></use></svg>
+        </button>
+
+        <button class="nav-button" id="materialsButton">
+          <svg class="icon"><use href="#book"></use></svg>
+          المواد الدراسية
+        </button>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">
+          <span class="dot"></span>
+          بوابتك الدراسية الهادئة
+        </div>
+
+        <h1>
+          كل ما تحتاجه للدراسة
+          <span>في مكان واحد</span>
+        </h1>
+
+        <p class="hero-copy">
+          مواد مرتبة وسهلة الوصول تساعدك على المذاكرة بهدوء، من التكليفات
+          والملخصات إلى الامتحانات والجدول الدراسي.
+        </p>
+
+        <div class="hero-actions">
+          <button class="primary" id="heroButton">
+            تصفح المواد
+            <svg class="icon"><use href="#arrow"></use></svg>
+          </button>
+
+          <span class="hero-count">
+            <strong>6</strong>
+            أقسام متاحة الآن
+          </span>
+        </div>
+
+        <div class="chips" data-reveal>
+          <span>روابط مباشرة</span>
+          <span>بحث سريع</span>
+          <span>محتوى منظّم</span>
+        </div>
+
+        <article class="prayer" data-reveal>
+          <span class="prayer-mark">۞</span>
+
+          <p class="prayer-main">
+            اللهم اغفر لها وارحمها، وعافها واعفُ عنها، وأكرم نُزُلها، ووسّع
+            مُدخلها، واجعل قبرها روضةً من رياض الجنة
+          </p>
+
+          <hr />
+
+          <small>
+            نسألكم الدعاء وقراءة الفاتحة على روح المرحومة
+            <strong>منى عيسى</strong>
+          </small>
+        </article>
+      </div>
+    </section>
+
+    <section class="library" id="materials">
+      <div class="library-head" data-reveal>
+        <div>
+          <span class="section-label">محتوى Google Drive</span>
+          <h2>اختر القسم الذي تحتاجه</h2>
+        </div>
+
+        <label class="search">
+          <svg class="icon"><use href="#search"></use></svg>
+          <input id="searchInput" placeholder="ابحث في المواد..." />
+        </label>
+      </div>
+
+      <div class="filters" data-reveal>
+        <button class="active" data-filter="all">
+          الكل
+          <b>6</b>
+        </button>
+
+        <button data-filter="folder">
+          المجلدات
+          <b>4</b>
+        </button>
+
+        <button data-filter="file">
+          الملفات
+          <b>2</b>
+        </button>
+      </div>
+
+      <div class="grid" id="grid">
+        <a
+          class="card"
+          data-kind="folder"
+          data-search="التكليفات Assignment الواجبات"
+          href="https://drive.google.com/drive/folders/1q2iShv3IAgodKIbiCxdYH8wlB_L-mFkp"
+          target="_blank"
+          rel="noreferrer"
+          style="--card: #8eaaa4"
+          data-title="التكليفات"
+          data-reveal
+        >
+          <span class="card-icon">
+            <svg class="icon"><use href="#assignment"></use></svg>
+          </span>
+
+          <div class="card-body">
+            <span class="card-kicker">التكليفات والواجبات</span>
+            <h3>التكليفات</h3>
+            <p>Assignment</p>
+
+            <div class="card-footer">
+              <span>فتح في Google Drive</span>
+
+              <span class="arrow-box">
+                <svg class="icon"><use href="#arrow"></use></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a
+          class="card"
+          data-kind="folder"
+          data-search="امتحانات السنين السابقة Previous Exams"
+          href="https://drive.google.com/drive/folders/1cFCyOdmaGWK_P3HKSu4blEF1dzk_xrwS"
+          target="_blank"
+          rel="noreferrer"
+          style="--card: #9ba8bd"
+          data-title="امتحانات السنين السابقة"
+          data-reveal
+        >
+          <span class="card-icon">
+            <svg class="icon"><use href="#exam"></use></svg>
+          </span>
+
+          <div class="card-body">
+            <span class="card-kicker">نماذج امتحانات سابقة</span>
+            <h3>امتحانات السنين السابقة</h3>
+            <p>Previous Exams</p>
+
+            <div class="card-footer">
+              <span>فتح في Google Drive</span>
+
+              <span class="arrow-box">
+                <svg class="icon"><use href="#arrow"></use></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a
+          class="card"
+          data-kind="folder"
+          data-search="السبورة صور شرح المحاضرات Lecture Board"
+          href="https://drive.google.com/drive/folders/1zEMOazUT__1CJIMd-FebMWT0XK7XVqmJ"
+          target="_blank"
+          rel="noreferrer"
+          style="--card: #a8a98f"
+          data-title="السبورة"
+          data-reveal
+        >
+          <span class="card-icon">
+            <svg class="icon"><use href="#board"></use></svg>
+          </span>
+
+          <div class="card-body">
+            <span class="card-kicker">صور وشرح المحاضرات</span>
+            <h3>السبورة</h3>
+            <p>Lecture Board</p>
+
+            <div class="card-footer">
+              <span>فتح في Google Drive</span>
+
+              <span class="arrow-box">
+                <svg class="icon"><use href="#arrow"></use></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a
+          class="card"
+          data-kind="folder"
+          data-search="شرح وملخصات Notes Summaries"
+          href="https://drive.google.com/drive/folders/1tUdF09IMYpOEdFj0TpgYbQoP_GlFM1-M"
+          target="_blank"
+          rel="noreferrer"
+          style="--card: #a28fa8"
+          data-title="شرح وملخصات"
+          data-reveal
+        >
+          <span class="card-icon">
+            <svg class="icon"><use href="#notes"></use></svg>
+          </span>
+
+          <div class="card-body">
+            <span class="card-kicker">شرح مبسّط وملخصات</span>
+            <h3>شرح وملخصات</h3>
+            <p>Notes &amp; Summaries</p>
+
+            <div class="card-footer">
+              <span>فتح في Google Drive</span>
+
+              <span class="arrow-box">
+                <svg class="icon"><use href="#arrow"></use></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a
+          class="card"
+          data-kind="file"
+          data-search="الجدول الدراسي المحاضرات Study Schedule"
+          href="https://drive.google.com/file/d/1d65dUJOZR5hKycrvytCxNwijwBuYMPS7/view"
+          target="_blank"
+          rel="noreferrer"
+          style="--card: #8da7b4"
+          data-title="الجدول الدراسي"
+          data-reveal
+        >
+          <span class="card-icon">
+            <svg class="icon"><use href="#calendar"></use></svg>
+          </span>
+
+          <div class="card-body">
+            <span class="card-kicker">جدول المحاضرات</span>
+            <h3>الجدول الدراسي</h3>
+            <p>Study Schedule</p>
+
+            <div class="card-footer">
+              <span>فتح في Google Drive</span>
+
+              <span class="arrow-box">
+                <svg class="icon"><use href="#arrow"></use></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+
+        <a
+          class="card"
+          data-kind="file"
+          data-search="اللائحة الأكاديمية Academic Regulations"
+          href="https://drive.google.com/file/d/1Yg1YFwaomiM_H-Wv6SKQ-d01rihH5zZr/view"
+          target="_blank"
+          rel="noreferrer"
+          style="--card: #ae9d87"
+          data-title="اللائحة"
+          data-reveal
+        >
+          <span class="card-icon">
+            <svg class="icon"><use href="#rules"></use></svg>
+          </span>
+
+          <div class="card-body">
+            <span class="card-kicker">اللائحة الأكاديمية</span>
+            <h3>اللائحة</h3>
+            <p>Academic Regulations</p>
+
+            <div class="card-footer">
+              <span>فتح في Google Drive</span>
+
+              <span class="arrow-box">
+                <svg class="icon"><use href="#arrow"></use></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="empty" id="empty">
+        لا توجد نتيجة بهذا الاسم، جرّب كلمة بحث أخرى.
+      </div>
+    </section>
+
+    <section class="sound-note" data-reveal>
+      <span class="sound-note-icon">
+        <svg class="icon"><use href="#volume"></use></svg>
+      </span>
+
+      <div>
+        <h2>تجربة مذاكرة أكثر هدوءًا</h2>
+
+        <p>
+          فعّل زر الصوت أعلى الصفحة للاستماع إلى مطر خفيف ومؤثرات انتقال
+          هادئة. يمكنك إيقافه في أي وقت.
+        </p>
+      </div>
+    </section>
+
+    <button class="top-button" id="topButton" aria-label="العودة للأعلى">
+      <svg class="icon"><use href="#arrow"></use></svg>
+    </button>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <footer>
+      <a class="brand sound-link" href="#top">
+        <span class="brand-logo">3R</span>
+        <span class="brand-name">3R Learning</span>
+      </a>
+
+      <p>
+        صُمم بواسطة
+        <strong>eng /Omar Refaeey</strong>
+      </p>
+
+      <span>© 2025 3R</span>
+    </footer>
+  </main>
+
+  <script>
+    const site = document.querySelector(".site");
+    const progress = document.getElementById("progress");
+    const topButton = document.getElementById("topButton");
+    const soundButton = document.getElementById("soundButton");
+    const searchInput = document.getElementById("searchInput");
+    const cards = [...document.querySelectorAll(".card")];
+    const filterButtons = [...document.querySelectorAll("[data-filter]")];
+    const empty = document.getElementById("empty");
+    const toast = document.getElementById("toast");
+
+    let activeFilter = "all";
+    let soundOn = false;
+    let audioContext = null;
+    let rainSource = null;
+    let rainGain = null;
+    let toastTimer = null;
+
+    const rain = document.getElementById("rain");
+
+    for (let index = 0; index < 32; index += 1) {
+      const drop = document.createElement("i");
+
+      drop.style.setProperty("--x", `${(index * 37) % 101}%`);
+      drop.style.setProperty(
+        "--duration",
+        `${4.5 + (index % 8) * 0.55}s`
+      );
+      drop.style.setProperty(
+        "--delay",
+        `${-(index % 11) * 0.7}s`
+      );
+
+      rain.appendChild(drop);
+    }
+
+    site.addEventListener("pointermove", (event) => {
+      site.style.setProperty("--px", `${event.clientX}px`);
+      site.style.setProperty("--py", `${event.clientY}px`);
+    });
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        const available =
+          document.documentElement.scrollHeight - window.innerHeight;
+
+        const value =
+          available > 0 ? window.scrollY / available : 0;
+
+        progress.style.transform = `scaleX(${value})`;
+
+        topButton.classList.toggle(
+          "visible",
+          window.scrollY > 560
+        );
+      },
+      { passive: true }
+    );
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("visible");
+
+      clearTimeout(toastTimer);
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("visible");
+      }, 2400);
+    }
+
+    function getAudioContext() {
+      if (!audioContext) {
+        const AudioContextClass =
+          window.AudioContext || window.webkitAudioContext;
+
+        audioContext = new AudioContextClass();
+      }
+
+      return audioContext;
+    }
+
+    function startRain() {
+      const context = getAudioContext();
+
+      context.resume();
+
+      if (rainSource) {
+        return;
+      }
+
+      const frames = context.sampleRate * 3;
+
+      const buffer = context.createBuffer(
+        2,
+        frames,
+        context.sampleRate
+      );
+
+      for (let channel = 0; channel < 2; channel += 1) {
+        const data = buffer.getChannelData(channel);
+
+        let last = 0;
+
+        for (let index = 0; index < frames; index += 1) {
+          const white = Math.random() * 2 - 1;
+
+          last = last * 0.82 + white * 0.18;
+          data[index] = last;
+        }
+      }
+
+      const source = context.createBufferSource();
+      const filter = context.createBiquadFilter();
+      const gain = context.createGain();
+
+      source.buffer = buffer;
+      source.loop = true;
+
+      filter.type = "lowpass";
+      filter.frequency.value = 2400;
+
+      gain.gain.value = 0.018;
+
+      source
+        .connect(filter)
+        .connect(gain)
+        .connect(context.destination);
+
+      source.start();
+
+      rainSource = source;
+      rainGain = gain;
+    }
+
+    function stopRain() {
+      const source = rainSource;
+
+      if (!source) {
+        return;
+      }
+
+      rainSource = null;
+
+      rainGain.gain.setTargetAtTime(
+        0,
+        audioContext.currentTime,
+        0.08
+      );
+
+      setTimeout(() => {
+        source.stop();
+        source.disconnect();
+      }, 350);
+
+      rainGain = null;
+    }
+
+    function playClick() {
+      if (!soundOn) {
+        return;
+      }
+
+      const context = getAudioContext();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+
+      oscillator.type = "sine";
+
+      oscillator.frequency.setValueAtTime(
+        420,
+        context.currentTime
+      );
+
+      oscillator.frequency.exponentialRampToValueAtTime(
+        620,
+        context.currentTime + 0.12
+      );
+
+      gain.gain.setValueAtTime(
+        0.0001,
+        context.currentTime
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.035,
+        context.currentTime + 0.025
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        context.currentTime + 0.18
+      );
+
+      oscillator
+        .connect(gain)
+        .connect(context.destination);
+
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.2);
+    }
+
+    soundButton.addEventListener("click", () => {
+      soundOn = !soundOn;
+
+      soundButton.classList.toggle("active", soundOn);
+
+      soundButton.innerHTML = soundOn
+        ? '<svg class="icon"><use href="#volume"></use></svg>'
+        : '<svg class="icon"><use href="#mute"></use></svg>';
+
+      if (soundOn) {
+        startRain();
+        showToast("صوت المطر الهادئ يعمل الآن");
+      } else {
+        stopRain();
+        showToast("تم إيقاف الأصوات");
+      }
+    });
+
+    function goToMaterials() {
+      playClick();
+
+      document
+        .getElementById("materials")
+        .scrollIntoView({
+          behavior: "smooth"
+        });
+    }
+
+    document
+      .getElementById("materialsButton")
+      .addEventListener("click", goToMaterials);
+
+    document
+      .getElementById("heroButton")
+      .addEventListener("click", goToMaterials);
+
+    topButton.addEventListener("click", () => {
+      playClick();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+
+    function updateCards() {
+      const query =
+        searchInput.value.trim().toLowerCase();
+
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const matchesFilter =
+          activeFilter === "all" ||
+          card.dataset.kind === activeFilter;
+
+        const matchesSearch =
+          card.dataset.search
+            .toLowerCase()
+            .includes(query);
+
+        const visible =
+          matchesFilter && matchesSearch;
+
+        card.style.display = visible
+          ? "flex"
+          : "none";
+
+        if (visible) {
+          visibleCount += 1;
+        }
+      });
+
+      empty.classList.toggle(
+        "visible",
+        visibleCount === 0
+      );
+    }
+
+    searchInput.addEventListener(
+      "input",
+      updateCards
+    );
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        playClick();
+
+        activeFilter = button.dataset.filter;
+
+        filterButtons.forEach((item) => {
+          item.classList.toggle(
+            "active",
+            item === button
+          );
+        });
+
+        updateCards();
+      });
+    });
+
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        playClick();
+
+        showToast(
+          `جاري فتح ${card.dataset.title}`
+        );
+      });
+    });
+
+    document
+      .querySelectorAll(".sound-link")
+      .forEach((link) => {
+        link.addEventListener(
+          "click",
+          playClick
+        );
+      });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(
+              "visible"
+            );
+          }
+        });
+      },
+      {
+        threshold: 0.12
+      }
+    );
+
+    document
+      .querySelectorAll("[data-reveal]")
+      .forEach((element) => {
+        observer.observe(element);
+      });
+  </script>
+</body>
+</html>
+```
